@@ -1,13 +1,28 @@
 package banking;
 
-public class HighCreditAccount extends NormalAccount {
-  public HighCreditAccount(String accountNumber, String accountHolder, int balance, double interestRate) {
-      super(accountNumber, accountHolder, balance, interestRate);
-  }
+class HighCreditAccount extends NormalAccount {
+    private String creditRating;
 
-  @Override
-  public void deposit(int amount) {
-      int additionalInterest = (int)(amount * (interestRate + 0.01)); // 가정: 신용등급에 따른 추가 이자율 1%
-      balance += (amount + additionalInterest);
-  }
+    public HighCreditAccount(String accNum, String name, int balance, double interestRate, String creditRating) {
+        super(accNum, name, balance, interestRate);
+        this.creditRating = creditRating;
+    }
+
+    @Override
+    public void deposit(int amount) {
+        int interest = (int)(getBalance() * getInterestRate());
+        int additionalInterest = 0;
+        switch (creditRating) {
+            case "A":
+                additionalInterest = (int)(getBalance() * 0.07);
+                break;
+            case "B":
+                additionalInterest = (int)(getBalance() * 0.04);
+                break;
+            case "C":
+                additionalInterest = (int)(getBalance() * 0.02);
+                break;
+        }
+        super.deposit(interest + additionalInterest + amount);
+    }
 }
